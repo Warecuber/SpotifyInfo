@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
     <title>Spotify Stats</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-
-        <div class="logo">
-            <img src="img/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Black.png" alt="Spotify Logo" class='logoImg'>
-        </div>
-        <p class="button loginButton" id='LoginButton'>Log in</p>
+      <div class="logo">
+        <img
+          src="img/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Black.png"
+          alt="Spotify Logo"
+          class="logoImg"
+        />
+      </div>
+      <p class="button loginButton" id="LoginButton">Log in</p>
     </div>
-    <div class="body">
-        <div class="myInfo">WhoAmI?</div>
-        <div class="mySongs">
-            <p>Song</p>
-            <p>Song</p>
-            <p>Song</p>
-            <p>Song</p>
-            <p>Song</p>
-        </div>
+    <div class="completedBody body hidden">
+      <div class="myInfo"></div>
+      <div class="mySongs"></div>
+    </div>
+    <div class="infoBody body">
+      <div class="myInfo"><span class='displayName'>View your Spotify statisitics</span><br><br>Click Login to login with your Spotify account and authorize my app to view your information.<br></div>
+      <div class="mySongs"></div>
     </div>
     <script src="app.js"></script>
-</body>
+  </body>
 </html>

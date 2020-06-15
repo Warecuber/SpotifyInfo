@@ -3,6 +3,7 @@ body {
   padding: 0px;
   margin: 0px;
   height: 100vh;
+  font-family: Montserrat;
 }
 body {
   display: flex;
@@ -34,6 +35,7 @@ body {
   color: white;
   padding: 1rem 2rem;
   border-radius: 2rem;
+  font-weight: 500;
   transition: 0.15s all ease-in-out;
 }
 .button:hover {
@@ -44,7 +46,8 @@ body {
 .body {
   display: block;
   height: auto;
-  margin: 1rem 6rem;
+  margin: 1rem 20%;
+  font-weight: 500;
   padding: 0.5rem;
   background-color: #1db954;
   border-radius: 5px;
@@ -62,4 +65,34 @@ body {
   padding:1rem 2rem;
   border-radius: 2rem;
   color:white;
+}
+.songElement{
+  margin:1rem 1rem;
+  background-color: white;
+  color:#191414;
+  padding:1rem;
+  border-radius: 1rem;
+}
+.songPreview{
+  width: 100%;
+  outline: none;
+}
+.songName{
+  font-weight: 700;
+}
+.songArtist{
+  font-style: italic;
+}
+.songMedia{
+  display: flex;
+  flex-direction: row;
+}
+.songImg{
+  width: 54px;
+}
+.hidden{
+  display: none !important;
+}
+.myInfo{
+  padding:0.5rem;
 }
