@@ -4,13 +4,15 @@ body {
   margin: 0px;
   height: 100vh;
 }
-body{
+body {
   display: flex;
   flex-direction: column;
   align-content: space-between;
 }
+.header::selection {
+  background-color: transparent;
+}
 .header {
-  height: 4rem;
   display: flex;
   background-color: #1db954;
   align-items: center;
@@ -18,30 +20,32 @@ body{
   flex-direction: row;
 }
 .logoImg {
-  height: 3rem;
-  margin-left: 0.4rem;
+  height: 2rem;
+  margin: 1rem;
   display: inline-flex;
 }
 .loginButton {
   margin-right: 2rem;
-  margin-top:0rem;
+  margin-top: 0rem;
   margin-bottom: 0rem;
 }
 .button {
   background-color: #191414;
   color: white;
-  padding:1rem 2rem;
+  padding: 1rem 2rem;
   border-radius: 2rem;
   transition: 0.15s all ease-in-out;
 }
-.button:hover{
-    cursor: pointer;
-    font-weight: 800;
-    letter-spacing: 1.5px;
+.button:hover {
+  cursor: pointer;
+  font-weight: 800;
+  letter-spacing: 1.5px;
 }
-.body{
-    display:block;
-    height: auto;
-    margin:1rem 6rem;
-    background-color: red;
+.body {
+  display: block;
+  height: auto;
+  margin: 1rem 6rem;
+  padding: 0.5rem;
+  background-color: #1db954;
+  border-radius: 5px;
 }
