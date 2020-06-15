@@ -11,7 +11,7 @@ var APIController = (() => {
         Authorization: `Bearer ${token}`,
       },
       success: function (data) {
-        UICtl.addMe(data);
+        UIController.addMe(data);
       },
     });
   }
@@ -27,7 +27,7 @@ var APIController = (() => {
         console.log(data);
       },
       error: function (req) {
-        if(req.status === 400){
+        if (req.status === 400) {
           UICtl.loginPage();
         }
       },
@@ -42,7 +42,7 @@ var APIController = (() => {
       loadMySongs();
     },
   };
-})(UICtl);
+})(UIController);
 
 var UIController = (() => {
   const redirectURI = `https://accounts.spotify.com/en/authorize/?client_id=3a1d09a1778a487ba0a87d74c84a3b51&response_type=token&show_dialog=true&scope=user-top-read%20user-read-recently-played%20user-read-email&redirect_uri=http:%2F%2Flocalhost:5500`;
@@ -54,6 +54,11 @@ var UIController = (() => {
   }
 
   function addMyInfo(info) {
+    $(".myInfo").html(`<span class='displayName'>${info.display_name}</span>`);
+    $('#LoginButton').html(`Logged in as ${info.email}`);
+    document.getElementById('LoginButton').classList.remove('button');
+    document.getElementById('LoginButton').classList.remove('loginButton');
+    document.getElementById('LoginButton').classList.add('loggedInInfo');
     console.log(info);
   }
 

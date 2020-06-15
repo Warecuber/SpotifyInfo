@@ -49,3 +49,17 @@ body {
   background-color: #1db954;
   border-radius: 5px;
 }
+.displayName{
+  font-size: 2rem;
+  font-weight: 700;
+}
+.loggedInInfo{
+  margin-right: 2rem;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  font-weight: 700;
+  background-color:#191414;
+  padding:1rem 2rem;
+  border-radius: 2rem;
+  color:white;
+}
