@@ -4,6 +4,11 @@ body {
   margin: 0px;
   height: 100vh;
 }
+body{
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+}
 .header {
   height: 4rem;
   display: flex;
