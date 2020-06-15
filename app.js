@@ -49,7 +49,7 @@ var APIController = (() => {
     history.pushState(
       { urlPath: window.location.pathname },
       "",
-      window.location.origin + window.location.pathname
+      `https://warecuber.github.io/SpotifyInfo/`
     );
     localStorage.setItem("oAuth", token);
     localStorage.setItem("loggedIn", true);
