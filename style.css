@@ -1,0 +1,42 @@
+html,
+body {
+  padding: 0px;
+  margin: 0px;
+  height: 100vh;
+}
+.header {
+  height: 4rem;
+  display: flex;
+  background-color: #1db954;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+}
+.logoImg {
+  height: 3rem;
+  margin-left: 0.4rem;
+  display: inline-flex;
+}
+.loginButton {
+  margin-right: 2rem;
+  margin-top:0rem;
+  margin-bottom: 0rem;
+}
+.button {
+  background-color: #191414;
+  color: white;
+  padding:1rem 2rem;
+  border-radius: 2rem;
+  transition: 0.15s all ease-in-out;
+}
+.button:hover{
+    cursor: pointer;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+.body{
+    display:block;
+    height: auto;
+    margin:1rem 6rem;
+    background-color: red;
+}
