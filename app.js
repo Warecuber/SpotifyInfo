@@ -1,12 +1,11 @@
 var APIController = (() => {
-  var oauthToken = localStorage.getItem("oAuth");
-
   function loadMyInfo() {
+    console.log("Loading my info");
     $.ajax({
       url: "https://api.spotify.com/v1/me",
       method: "GET",
       headers: {
-        Authorization: `Bearer ${oauthToken}`,
+        Authorization: `Bearer ${localStorage.getItem("oAuth")}`,
       },
       success: function (data) {
         UIController.addMe(data);
@@ -14,17 +13,20 @@ var APIController = (() => {
       error: function (req, err) {
         if (req.status === 400 || req.status === 401) {
           UIController.loginPage();
-        } else console.log(err);
+        } else {
+          console.log(err);
+        }
       },
     });
   }
 
   function loadMySongs() {
+    console.log("Loading my stats");
     $.ajax({
       url: "https://api.spotify.com/v1/me/top/tracks",
       method: "GET",
       headers: {
-        Authorization: `Bearer ${oauthToken}`,
+        Authorization: `Bearer ${localStorage.getItem("oAuth")}`,
       },
       success: function (data) {
         UIController.listSongs(data.items);
@@ -40,6 +42,7 @@ var APIController = (() => {
   }
 
   function generateAPIToken() {
+    console.log("Called token gen");
     let myURL = window.location.hash;
     let URLSplit = myURL.split("&");
     token = URLSplit[0].replace("#access_token=", "");
@@ -70,24 +73,31 @@ var UIController = (() => {
 
   // Function to redirect to the Spotify login page
   function logMeIn() {
-    console.log("redirectURI");
     window.location.href = redirectURI;
+  }
+  function logMeOut() {
+    console.log("Called logout");
+    localStorage.removeItem("oAuth");
+    localStorage.removeItem("LoggedIn");
+    buttonToggle();
+    toggleUI();
   }
 
   function addMyInfo(info) {
     $(".myInfo").html(`<span class='displayName'>${info.display_name}</span>`);
-    $("#LoginButton").html(`Logged in as ${info.email}`);
-    document.getElementById("LoginButton").classList.remove("button");
-    document.getElementById("LoginButton").classList.remove("loginButton");
-    document.getElementById("LoginButton").classList.add("loggedInInfo");
-    console.log(info);
+    $("#loggedInButton").html(`Log out ${info.email}`);
+    buttonToggle();
+  }
+
+  function buttonToggle() {
+    document.getElementById("LoginButton").classList.toggle("hidden");
+    document.getElementById("loggedInButton").classList.toggle("hidden");
   }
 
   function listMySongs(list) {
     list.forEach((element) => {
       addASong(element);
     });
-    console.log(list);
   }
 
   function addASong(song) {
@@ -105,9 +115,15 @@ var UIController = (() => {
     if (localStorage.getItem("loggedIn")) {
       APIController.myInfo();
       APIController.mySongs();
-      document.querySelector('.infoBody').classList.add('hidden');
-      document.querySelector('.completedBody').classList.remove('hidden');
+      toggleUI();
     }
+    //event listeners
+    $(".loginButton").on("click", logMeIn);
+    $(".logOutButton").on("click", logMeOut);
+  }
+  function toggleUI() {
+    document.querySelector(".infoBody").classList.toggle("hidden");
+    document.querySelector(".completedBody").classList.toggle("hidden");
   }
 
   return {
@@ -126,5 +142,4 @@ var UIController = (() => {
   };
 })(APIController);
 
-$(".loginButton").on("click", UIController.loginPage);
 UIController.onLoad();
