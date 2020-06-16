@@ -46,11 +46,23 @@ var APIController = (() => {
     let myURL = window.location.hash;
     let URLSplit = myURL.split("&");
     token = URLSplit[0].replace("#access_token=", "");
-    history.pushState(
-      { urlPath: window.location.pathname },
-      "",
-      `https://warecuber.github.io/SpotifyInfo/`
-    );
+    if (
+      window.location.origin == "http://localhost:5500" ||
+      window.location.origin == "http://127.0.0.1:5500"
+    ) {
+      history.pushState(
+        { urlPath: window.location.pathname },
+        "",
+        `http://localhost:5500`
+      );
+    } else {
+      history.pushState(
+        { urlPath: window.location.pathname },
+        "",
+        `https://warecuber.github.io/SpotifyInfo/`
+      );
+    }
+
     localStorage.setItem("oAuth", token);
     localStorage.setItem("loggedIn", true);
   }
@@ -69,7 +81,7 @@ var APIController = (() => {
 })(UIController);
 
 var UIController = (() => {
-  const redirectURI = `https://accounts.spotify.com/en/authorize/?client_id=3a1d09a1778a487ba0a87d74c84a3b51&response_type=token&show_dialog=true&scope=user-top-read%20user-read-recently-played%20user-read-email&redirect_uri=https://warecuber.github.io/SpotifyInfo/`;
+  const redirectURI = `https://accounts.spotify.com/en/authorize/?client_id=3a1d09a1778a487ba0a87d74c84a3b51&response_type=token&show_dialog=true&scope=user-top-read%20user-read-recently-played%20user-read-email&redirect_uri=${window.location.href}`;
 
   // Function to redirect to the Spotify login page
   function logMeIn() {
