@@ -107,7 +107,7 @@ var APIController = (() => {
 
 var UIController = (() => {
   var currentURL = window.location.href;
-  var splitURL = currentURL.split('?');
+  var splitURL = currentURL.split("?");
   const redirectURI = `https://accounts.spotify.com/en/authorize/?client_id=3a1d09a1778a487ba0a87d74c84a3b51&response_type=token&show_dialog=true&scope=user-top-read%20user-read-recently-played%20user-read-email&redirect_uri=${splitURL[0]}`;
 
   // Function to redirect to the Spotify login page
@@ -174,7 +174,7 @@ var UIController = (() => {
     if (window.location.hash) {
       APIController.genOauth();
     }
-    if (localStorage.getItem("loggedIn") === 'true') {
+    if (localStorage.getItem("loggedIn") === "true") {
       APIController.myInfo();
       APIController.mySongs();
       toggleUI();
@@ -191,7 +191,11 @@ var UIController = (() => {
     if (content === "load") {
       APIController.myArtists();
     } else {
-      changeTabs();
+      if (
+        document.querySelector(".topArtists").classList.contains("inactiveTab")
+      ) {
+        changeTabs();
+      }
     }
   }
   function checkSongContent() {
