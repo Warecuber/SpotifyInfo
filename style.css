@@ -26,7 +26,7 @@ body {
   margin: 1rem;
   display: inline-flex;
 }
-.loginButton {
+.loginButton, .logOutButton{
   margin-right: 2rem;
   margin-top: 0rem;
   margin-bottom: 0rem;
@@ -38,11 +38,12 @@ body {
   border-radius: 2rem;
   font-weight: 500;
   transition: 0.15s all ease-in-out;
+  border: 2px solid #191414
 }
 .button:hover {
   cursor: pointer;
-  font-weight: 800;
-  letter-spacing: 1.5px;
+  background-color: transparent;
+  color: #191414;
 }
 .body {
   display: block;
@@ -144,7 +145,8 @@ body {
   transition: 0.1s all ease-in-out;
 }
 .artistLink:hover {
-  opacity: 0.7;
+  transform: scale(1.04);
+  background-color: #1ed760;
 }
 .artistName {
   display: flex;
