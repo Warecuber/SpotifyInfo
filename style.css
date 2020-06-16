@@ -155,7 +155,15 @@ body {
 .artistImg {
   height: 6rem;
 }
-
+.songLink{
+  text-decoration: underline;
+  color:inherit !important;
+  outline: none;
+  transition: 0.1s all ease-in-out;
+}
+.songLink:hover{
+  text-decoration: none;
+}
 /* Responsive settings */
 
 @media only screen and (max-width: 1200px) {

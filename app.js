@@ -159,7 +159,7 @@ var UIController = (() => {
     let newSong = document.createElement("div");
     if (where === ".mySongs") {
       newSong.classList.add("songElement");
-      newSong.innerHTML = `<span class='songName'>${song.name}</span><span class'songArtist'> - ${song.artists[0].name}</span><br><br><div class='songMedia'><audio controls class='songPreview'><source src='${song.preview_url}'></audio><img src='${song.album.images[0].url}' class='songImg'></div>`;
+      newSong.innerHTML = `<span class='songName'><a href='${song.external_urls.spotify}' target='_Blank' class='songLink'>${song.name}</a></span><span class'songArtist'> - ${song.artists[0].name}</span><br><br><div class='songMedia'><audio controls class='songPreview'><source src='${song.preview_url}'></audio><img src='${song.album.images[0].url}' class='songImg'></div>`;
       container.insertAdjacentElement("beforeend", newSong);
     } else if (where === ".myArtists") {
       newSong.classList.add("artistElement");
