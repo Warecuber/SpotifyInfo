@@ -41,6 +41,28 @@ var APIController = (() => {
     });
   }
 
+  function loadMyArtists() {
+    console.log("Loading my artists");
+    $.ajax({
+      url: "https://api.spotify.com/v1/me/top/artists",
+      method: "GET",
+      async: true,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("oAuth")}`,
+      },
+      success: function (data) {
+        UIController.listArtists(data.items);
+      },
+      error: function (req, err) {
+        if (req.status === 400 || req.status === 401) {
+          UIController.loginPage();
+        } else {
+          console.log(err);
+        }
+      },
+    });
+  }
+
   function generateAPIToken() {
     console.log("Called token gen");
     let myURL = window.location.hash;
@@ -73,6 +95,9 @@ var APIController = (() => {
     },
     mySongs: () => {
       loadMySongs();
+    },
+    myArtists: () => {
+      loadMyArtists();
     },
     genOauth: () => {
       generateAPIToken();
@@ -108,16 +133,39 @@ var UIController = (() => {
 
   function listMySongs(list) {
     list.forEach((element) => {
-      addASong(element);
+      addAnItem(element, ".mySongs");
     });
   }
 
-  function addASong(song) {
-    let container = document.querySelector(".mySongs");
+  function listMyArtists(list) {
+    $(".myArtists").html("");
+    changeTabs();
+    list.forEach((element) => {
+      addAnItem(element, ".myArtists");
+    });
+  }
+
+  function changeTabs() {
+    document.querySelector(".mySongs").classList.toggle("hidden");
+    document.querySelector(".myArtists").classList.toggle("hidden");
+    document.querySelector(".topSongs").classList.toggle("activeTab");
+    document.querySelector(".topSongs").classList.toggle("inactiveTab");
+    document.querySelector(".topArtists").classList.toggle("activeTab");
+    document.querySelector(".topArtists").classList.toggle("inactiveTab");
+  }
+
+  function addAnItem(song, where) {
+    let container = document.querySelector(where);
     let newSong = document.createElement("div");
-    newSong.classList.add("songElement");
-    newSong.innerHTML = `<span class='songName'>${song.name}</span><span class'songArtist'> - ${song.artists[0].name}</span><br><br><div class='songMedia'><audio controls class='songPreview'><source src='${song.preview_url}'></audio><img src='${song.album.images[0].url}' class='songImg'></div>`;
-    container.insertAdjacentElement("beforeend", newSong);
+    if (where === ".mySongs") {
+      newSong.classList.add("songElement");
+      newSong.innerHTML = `<span class='songName'>${song.name}</span><span class'songArtist'> - ${song.artists[0].name}</span><br><br><div class='songMedia'><audio controls class='songPreview'><source src='${song.preview_url}'></audio><img src='${song.album.images[0].url}' class='songImg'></div>`;
+      container.insertAdjacentElement("beforeend", newSong);
+    } else if (where === ".myArtists") {
+      newSong.classList.add("artistElement");
+      newSong.innerHTML = `<span class='artistName'><a href='${song.external_urls.spotify}' class='artistLink' target="_Blank">${song.name}</a><img src='${song.images[0].url}' class='artistImg'></span>`;
+      container.insertAdjacentElement("beforeend", newSong);
+    }
   }
 
   function loadPage() {
@@ -132,7 +180,25 @@ var UIController = (() => {
     //event listeners
     $(".loginButton").on("click", logMeIn);
     $(".logOutButton").on("click", logMeOut);
+    $(".topArtists").on("click", checkArtistContent);
+    $(".topSongs").on("click", checkSongContent);
   }
+
+  function checkArtistContent() {
+    var content = document.querySelector(".myArtists").innerHTML;
+    if (content === "load") {
+      APIController.myArtists();
+    } else {
+      changeTabs();
+    }
+  }
+  function checkSongContent() {
+    var content = document.querySelector(".topSongs");
+    if (!content.classList.contains("activeTab")) {
+      changeTabs();
+    }
+  }
+
   function toggleUI() {
     document.querySelector(".infoBody").classList.toggle("hidden");
     document.querySelector(".completedBody").classList.toggle("hidden");
@@ -147,6 +213,9 @@ var UIController = (() => {
     },
     listSongs: (list) => {
       listMySongs(list);
+    },
+    listArtists: (list) => {
+      listMyArtists(list);
     },
     onLoad: () => {
       loadPage();

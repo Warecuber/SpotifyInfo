@@ -50,77 +50,136 @@ body {
   margin: 1rem 20%;
   font-weight: 500;
   padding: 0.5rem;
+  padding-top: 0rem;
   background-color: #1db954;
   border-radius: 5px;
 }
-.displayName{
+.displayName {
   font-size: 2rem;
   font-weight: 700;
   text-decoration: underline;
 }
-.loggedInInfo{
+.loggedInInfo {
   margin-right: 2rem;
   margin-top: 0rem;
   margin-bottom: 0rem;
   font-weight: 700;
-  background-color:#191414;
-  padding:1rem 2rem;
+  background-color: #191414;
+  padding: 1rem 2rem;
   border-radius: 2rem;
-  color:white;
+  color: white;
 }
-.songElement{
-  margin:1rem 1rem;
+.songElement,
+.artistElement {
+  margin: 1rem 1rem;
   background-color: white;
-  color:#191414;
-  padding:1rem;
+  color: #191414;
+  padding: 1rem;
   border-radius: 1rem;
 }
-.songPreview{
+.songPreview {
   width: 100%;
   outline: none;
 }
-.songName{
+.songName {
   font-weight: 700;
 }
-.songArtist{
+.songArtist {
   font-style: italic;
 }
-.songMedia{
+.songMedia {
   display: flex;
   flex-direction: row;
 }
-.songImg{
+.songImg {
   width: 54px;
+  margin: 0rem 1rem;
 }
-.hidden{
+.hidden {
   display: none !important;
 }
-.myInfo, .aboutTheApp{
-  padding:0.5rem;
+.myInfo,
+.aboutTheApp {
+  padding: 0.5rem;
 }
+.topSongs,
+.topArtists {
+  min-width: 7rem;
+  height: 2rem;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  margin: 0rem 0.5rem;
+  background-color: white;
+  color: black;
+  box-shadow: black 2px 2px 6px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  cursor: pointer;
+  transition: 0.1s all ease-in-out;
+}
+.tabs {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+.inactiveTab:hover {
+  background-color: rgb(185, 185, 185);
+}
+.activeTab {
+  background-color: #191414;
+  color: white;
+  box-shadow: none !important;
+}
+.artistLink {
+  font-weight: 600;
+  text-decoration: none;
+  color: black;
+  background-color: #1db954;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  max-height: 2rem;
+  outline: none;
+  transition: 0.1s all ease-in-out;
+}
+.artistLink:hover {
+  opacity: 0.7;
+}
+.artistName {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.artistImg {
+  height: 6rem;
+}
+
+/* Responsive settings */
 
 @media only screen and (max-width: 1200px) {
   .body {
-    margin:1rem 10%;
+    margin: 1rem 10%;
   }
-  .button{
-    font-size:12px;
-    padding:0.5rem 1rem;
+  .button {
+    font-size: 12px;
+    padding: 0.5rem 1rem;
   }
-  .logoImg{
-    height:1.5rem;
+  .logoImg {
+    height: 1.5rem;
   }
 }
 
 @media only screen and (max-width: 950px) {
   .body {
-    margin:1rem 1rem;
+    margin: 1rem 1rem;
   }
-  .button{
-    font-size:12px;
-    padding:0.5rem 1rem;
+  .button {
+    font-size: 12px;
+    padding: 0.5rem 1rem;
   }
-  .logoImg{
-    height:1.5rem;
+  .logoImg {
+    height: 1.5rem;
   }
 }
