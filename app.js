@@ -115,7 +115,7 @@ var UIController = (() => {
   function logMeOut() {
     console.log("Called logout");
     localStorage.removeItem("oAuth");
-    localStorage.removeItem("LoggedIn");
+    localStorage.removeItem("loggedIn");
     buttonToggle();
     toggleUI();
   }
@@ -172,7 +172,7 @@ var UIController = (() => {
     if (window.location.hash) {
       APIController.genOauth();
     }
-    if (localStorage.getItem("loggedIn")) {
+    if (localStorage.getItem("loggedIn") === 'true') {
       APIController.myInfo();
       APIController.mySongs();
       toggleUI();
