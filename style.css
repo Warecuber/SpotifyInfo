@@ -98,7 +98,7 @@ body {
   margin: 0rem 1rem;
 }
 .hidden {
-  display: none !important;
+  display: none;
 }
 .myInfo,
 .aboutTheApp {
