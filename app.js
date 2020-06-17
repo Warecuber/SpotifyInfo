@@ -34,8 +34,12 @@ var APIController = (() => {
       error: function (req, err) {
         if (req.status === 400 || req.status === 401) {
           UIController.loginPage();
+        } else if (req.status === 429) {
+          errorBanner(
+            "Error: Too many requests. Please try again in a few minutes."
+          );
         } else {
-          console.log(err);
+          errorBanner("Sorry, something went wrong. Please try again.");
         }
       },
     });
@@ -56,8 +60,12 @@ var APIController = (() => {
       error: function (req, err) {
         if (req.status === 400 || req.status === 401) {
           UIController.loginPage();
+        } else if (req.status === 429) {
+          errorBanner(
+            "Error: Too many requests. Please try again in a few minutes."
+          );
         } else {
-          console.log(err);
+          errorBanner("Sorry, something went wrong. Please try again.");
         }
       },
     });
@@ -108,7 +116,7 @@ var APIController = (() => {
 var UIController = (() => {
   var currentURL = window.location.href;
   var splitURL = currentURL.split("?");
-  const redirectURI = `https://accounts.spotify.com/en/authorize/?client_id=3a1d09a1778a487ba0a87d74c84a3b51&response_type=token&show_dialog=true&scope=user-top-read%20user-read-recently-played%20user-read-email&redirect_uri=${splitURL[0]}`;
+  const redirectURI = `https://accounts.spotify.com/en/authorize/?client_id=3a1d09a1778a487ba0a87d74c84a3b51&response_type=token&show_dialog=false&scope=user-top-read%20user-read-recently-played%20user-read-email&redirect_uri=${splitURL[0]}`;
 
   // Function to redirect to the Spotify login page
   function logMeIn() {
@@ -210,6 +218,12 @@ var UIController = (() => {
     document.querySelector(".completedBody").classList.toggle("hidden");
   }
 
+  function errorBanner(error) {
+    console.error(error);
+    $(".bannerText").html(error);
+    $(".bannerContainer").fadeIn(200).delay(3000).fadeOut(200);
+  }
+
   return {
     loginPage: () => {
       logMeIn();
@@ -225,6 +239,9 @@ var UIController = (() => {
     },
     onLoad: () => {
       loadPage();
+    },
+    error: (error) => {
+      errorBanner(error);
     },
   };
 })(APIController);
