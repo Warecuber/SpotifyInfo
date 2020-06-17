@@ -168,7 +168,6 @@ body {
   text-decoration: none;
 }
 .bannerContainer {
-  display: flex;
   justify-content: center;
   height: 3rem;
   position: fixed;
