@@ -271,6 +271,20 @@ body {
   transform: scale(1.04);
   background-color: #1ed760;
 }
+.playerNext{
+  padding:0.3rem;
+  border-radius: 5px;
+  font-size:0.7rem;
+  border-top:1px solid black;
+  border-bottom:1px solid black;
+}
+.playerNext:hover{
+  cursor: pointer;
+  background-color: #1db954;
+}
+.songInfo{
+  margin:0.3rem;
+}
 
 /* Responsive settings */
 

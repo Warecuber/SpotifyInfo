@@ -166,7 +166,6 @@ var APIController = (() => {
 
   function changePlayer() {
     console.log("Changed player");
-    console.log(localStorage.getItem("deviceID"));
     $.ajax({
       url: "https://api.spotify.com/v1/me/player",
       method: "PUT",
@@ -191,8 +190,6 @@ var APIController = (() => {
         } else {
           UIController.error("Sorry, something went wrong. Please try again.");
         }
-        console.log(err, req);
-        console.log(data);
       },
     });
   }
@@ -225,8 +222,6 @@ var APIController = (() => {
         } else {
           UIController.error("Sorry, something went wrong. Please try again.");
         }
-        console.log(err, req);
-        console.log(data);
       },
     });
   }
@@ -403,7 +398,6 @@ var UIController = (() => {
           .classList.add("fa-pause-circle");
       }
     } else {
-      console.log("Test");
       $(".songInfo").html(
         `<div class='currentSongName'>Nothing is currently playing</div><span class='currentArtistName'>${current.item.artists[0].name}</span>`
       );
@@ -495,6 +489,7 @@ var UIController = (() => {
     $(".bannerContainer").fadeIn(200).delay(3000).fadeOut(200);
   }
 
+  // displays an info banner for the data inputted into the function
   function infoBanner(info) {
     $(".bannerText").html(info);
     $(".bannerContent").css({
@@ -517,14 +512,10 @@ var UIController = (() => {
     ((that) => {
       setTimeout((that) => {
         $(".playNextButton").on("click", (that) => {
-          console.log(that);
           miniPlayer.addSong(that.target.id);
         });
       }, 500);
     })();
-    // document.querySelector('.playNextButton').addEventListener('click', () => {
-    //   console.log('pressed')
-    // })
   }
 
   SpotifyStatsMiniplayer.prototype.toggleStatus = function () {
@@ -546,11 +537,11 @@ var UIController = (() => {
     APIController.play();
     miniPlayer.playing = true;
   };
+
   SpotifyStatsMiniplayer.prototype.addSong = (info) => {
-    console.log(info);
     APIController.playNext(info);
-    // console.log(`Added ${this.data - name}`);
   };
+
   SpotifyStatsMiniplayer.prototype.updateInfo = (currentStatus) => {
     $(".songInfo").html(
       `<div class='currentSongName'>${currentStatus.track_window.current_track.name}</div><span class='currentArtistName'>${currentStatus.track_window.current_track.artists[0].name}</span>`
@@ -588,6 +579,19 @@ var UIController = (() => {
     player.addListener("player_state_changed", (state) => {
       console.log(state);
       miniPlayer.updateInfo(state);
+      if (!document.querySelector(".playerNext")) {
+        let html = document.createElement("div");
+        html.classList.add("playerNext");
+        document
+          .querySelector(".playerInfo")
+          .insertAdjacentElement("beforeend", html);
+      }
+      $(".playerNext").html(
+        `Next song: ${state.track_window.next_tracks[0].name}`
+      );
+      document
+        .querySelector(".playerNext")
+        .addEventListener("click", APIController.skip);
     });
 
     // Ready
