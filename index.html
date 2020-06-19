@@ -4,9 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+      integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="style.css" />
-    <link rel="shortcut icon" href="img/icons/favicon.ico" type="image/x-icon">
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <link
+      rel="shortcut icon"
+      href="img/icons/favicon.ico"
+      type="image/x-icon"
+    />
     <title>Spotify Stats</title>
   </head>
   <body>
@@ -28,16 +42,33 @@
     </div>
     <div class="completedBody body hidden">
       <div class="tabs">
-        <span class="topSongs activeTab" id='topSongs'>Top Songs</span>
-        <span class="topArtists inactiveTab" id='topArtists'>Top Artists</span>
+        <span class="topSongs activeTab" id="topSongs">Top Songs</span>
+        <span class="topArtists inactiveTab" id="topArtists">Top Artists</span>
       </div>
       <div class="myInfo"></div>
       <div class="mySongs"></div>
       <div class="myArtists hidden">load</div>
     </div>
     <div class="infoBody body">
-      <div class="aboutTheApp"><span class='displayName'>View your Spotify statisitics</span><br><br>Click Login to login with your Spotify account and authorize my app to view your information.<br></div>
+      <div class="aboutTheApp">
+        <span class="displayName">View your Spotify statisitics</span
+        ><br /><br />Click Login to login with your Spotify account and
+        authorize my app to view your information.<br />
+      </div>
       <div class="mySongs"></div>
+    </div>
+    <div class="player">
+      <div class="playerStatus">
+        <i class="toggleButton"></i>
+        <span class="popupInfo">Currently Playing</span>
+      </div>
+      <div class="playerInfo hidden">
+        <div class="controls">
+          <i class="fas" id='playPauseButton'></i>
+          Play/Pause
+        </div>
+        <div class="songInfo"></div>
+      </div>
     </div>
     <script src="app.js"></script>
   </body>
