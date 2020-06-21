@@ -324,7 +324,7 @@ var UIController = (() => {
   var miniPlayer;
   var currentURL = window.location.href;
   var splitURL = currentURL.split("?");
-  const redirectURI = `https://accounts.spotify.com/en/authorize/?client_id=3a1d09a1778a487ba0a87d74c84a3b51&response_type=token&show_dialog=false&scope=user-top-read%20user-read-recently-played%20user-read-email%20user-read-private%20streaming&redirect_uri=${splitURL[0]}`;
+  const redirectURI = `https://accounts.spotify.com/en/authorize/?client_id=3a1d09a1778a487ba0a87d74c84a3b51&response_type=token&show_dialog=false&scope=user-top-read%20user-read-recently-played%20user-read-email%20user-read-private%20streaming%20user-read-playback-state&redirect_uri=${splitURL[0]}`;
 
   // Function to redirect to the Spotify login page
   function logMeIn() {
