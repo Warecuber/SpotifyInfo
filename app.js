@@ -255,6 +255,35 @@ var APIController = (() => {
     });
   }
 
+  function changeVolume(value) {
+    $.ajax({
+      url: `https://api.spotify.com/v1/me/player/volume?volume_percent=${value}`,
+      method: "PUT",
+      async: true,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("oAuth")}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      success: function (data) {
+        console.log(`volume set to ${value}%`);
+      },
+      error: function (req, err) {
+        if (req.status === 400 || req.status === 401) {
+          UIController.loginPage();
+        } else if (req.status === 429) {
+          UIController.error(
+            "Error: Too many requests. Please try again in a few minutes."
+          );
+        } else if (req.status === 404) {
+          changePlayer();
+        } else {
+          UIController.error("Sorry, something went wrong. Please try again.");
+        }
+      },
+    });
+  }
+
   function generateAPIToken() {
     console.log("Called token gen");
     let myURL = window.location.hash;
@@ -311,6 +340,9 @@ var APIController = (() => {
     },
     skip: () => {
       skipSong();
+    },
+    volume: (value) => {
+      changeVolume(value);
     },
   };
 })(UIController);
@@ -448,7 +480,11 @@ var UIController = (() => {
     $(".topArtists").on("click", checkArtistContent);
     $(".topSongs").on("click", checkSongContent);
     $(".playerStatus").on("click", movePlayer);
+    $(".playerVolume").on("mouseup", function () {
+      APIController.volume(this.value);
+    });
     APIController.currentlyPlaying();
+    APIController.volume(document.querySelector(".playerVolume").value);
   }
 
   // checks to see if an API call is required to load the artists

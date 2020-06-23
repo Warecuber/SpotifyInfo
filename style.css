@@ -285,7 +285,38 @@ body {
 .songInfo{
   margin:0.3rem;
 }
+.playerVolume {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 0.5rem;
+  background: #191414;
+  outline: none;
+  opacity: 0.8;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+.playerVolume:hover{
+  opacity: 0.9;
+}
+.playerVolume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  border:1px solid black;
+  background: #1db954;
+  cursor: pointer;
+}
 
+.playerVolume:hover::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  border:1px solid black;
+  border-radius: 50%;
+  background: #1db954;
+  cursor: pointer;
+}
 /* Responsive settings */
 
 @media only screen and (max-width: 1200px) {
