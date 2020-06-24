@@ -294,6 +294,7 @@ body {
   opacity: 0.8;
   -webkit-transition: 0.2s;
   transition: opacity 0.2s;
+  border-radius: 5px;
 }
 .playerVolume:hover {
   opacity: 0.9;
