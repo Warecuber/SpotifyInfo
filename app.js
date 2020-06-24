@@ -194,6 +194,46 @@ var APIController = (() => {
     });
   }
 
+  function checkPlayer() {
+    console.log("Checking player...");
+    $.ajax({
+      url: "https://api.spotify.com/v1/me/player",
+      method: "get",
+      async: true,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("oAuth")}`,
+        "Content-Type": "application/json",
+      },
+      success: function (data) {
+        if (data) {
+          console.log(data);
+          document.querySelector(".playerVolume").value =
+            data.device.volume_percent;
+        }
+        console.log(data);
+        if (data.device.id != localStorage.getItem("deviceId")) {
+          let el = document.createElement("div");
+          el.innerHTML = `Now playing on ${data.device.name}`;
+          el.classList.add("playerName");
+          document
+            .querySelector(".controls")
+            .insertAdjacentElement("afterend", el);
+        }
+      },
+      error: function (req, err, data) {
+        if (req.status === 400 || req.status === 401) {
+          UIController.loginPage();
+        } else if (req.status === 429) {
+          UIController.error(
+            "Error: Too many requests. Please try again in a few minutes."
+          );
+        } else {
+          UIController.error("Sorry, something went wrong. Please try again.");
+        }
+      },
+    });
+  }
+
   function skipSong() {
     console.log("Skipped Song");
     $.ajax({
@@ -278,7 +318,7 @@ var APIController = (() => {
         } else if (req.status === 404) {
           changePlayer();
         } else {
-          UIController.error("Sorry, something went wrong. Please try again.");
+          // UIController.error("Sorry, something went wrong. Please try again.");
         }
       },
     });
@@ -332,6 +372,9 @@ var APIController = (() => {
     play: () => {
       playSong();
     },
+    check: () => {
+      checkPlayer();
+    },
     playerSwitch: () => {
       changePlayer();
     },
@@ -356,7 +399,10 @@ var UIController = (() => {
   var miniPlayer;
   var currentURL = window.location.href;
   var splitURL = currentURL.split("?");
+  var progressObj = new ProgressBar(0, 0);
+  console.log(progressObj);
   const redirectURI = `https://accounts.spotify.com/en/authorize/?client_id=3a1d09a1778a487ba0a87d74c84a3b51&response_type=token&show_dialog=false&scope=user-top-read%20user-read-recently-played%20user-read-email%20user-read-private%20streaming%20user-read-playback-state&redirect_uri=${splitURL[0]}`;
+  let progressBarRunning = false;
 
   // Function to redirect to the Spotify login page
   function logMeIn() {
@@ -484,7 +530,7 @@ var UIController = (() => {
       APIController.volume(this.value);
     });
     APIController.currentlyPlaying();
-    APIController.volume(document.querySelector(".playerVolume").value);
+    APIController.check();
   }
 
   // checks to see if an API call is required to load the artists
@@ -534,6 +580,41 @@ var UIController = (() => {
     $(".bannerContainer").fadeIn(200).delay(3000).fadeOut(200);
   }
 
+  /////////////////////////////////
+  // Prototype for progress bar //
+  ///////////////////////////////
+
+  function ProgressBar(time, progress) {
+    this.progress = progress / 1000;
+    this.time = time / 1000;
+    this.running = false;
+    this.interval;
+  }
+
+  ProgressBar.prototype.start = function () {
+    this.running = true;
+    this.interval = setInterval(this.run, 1000);
+  };
+
+  ProgressBar.prototype.stop = function () {
+    this.running = false;
+    clearInterval(this.interval);
+  };
+
+  ProgressBar.prototype.run = function () {
+    if (progressObj.progress === progressObj.time) {
+      progressObj.running = false;
+      clearInterval(progressObj.run);
+    } else {
+      let percentDecimal = progressObj.progress / progressObj.time;
+      let percent = percentDecimal * 100;
+      $(".progressBar").css({
+        width: `${percent}%`,
+      });
+      progressObj.progress++;
+    }
+  };
+
   ////////////////////////////////
   // Prototype for player info //
   //////////////////////////////
@@ -565,13 +646,20 @@ var UIController = (() => {
   };
 
   SpotifyStatsMiniplayer.prototype.pause = () => {
+    progressObj.stop();
+    progressBarRunning = false;
+    // clearInterval(changeTime);
     APIController.pause();
     miniPlayer.playing = false;
   };
 
   SpotifyStatsMiniplayer.prototype.play = () => {
+    if (progressObj) {
+      progressObj.start();
+    }
     APIController.play();
     miniPlayer.playing = true;
+    // progressObj.start();
   };
 
   SpotifyStatsMiniplayer.prototype.addSong = (info) => {
@@ -613,7 +701,9 @@ var UIController = (() => {
 
     // Playback status updates
     player.addListener("player_state_changed", (state) => {
-      console.log(state);
+      // console.log(state);
+      progressObj.progress = state.position / 100;
+      progressObj.time = state.duration / 100;
       miniPlayer.updateInfo(state);
       if (!document.querySelector(".playerNext")) {
         let html = document.createElement("div");

@@ -271,19 +271,19 @@ body {
   transform: scale(1.04);
   background-color: #1ed760;
 }
-.playerNext{
-  padding:0.3rem;
+.playerNext {
+  padding: 0.3rem;
   border-radius: 5px;
-  font-size:0.7rem;
-  border-top:1px solid black;
-  border-bottom:1px solid black;
+  font-size: 0.7rem;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
 }
-.playerNext:hover{
+.playerNext:hover {
   cursor: pointer;
   background-color: #1db954;
 }
-.songInfo{
-  margin:0.3rem;
+.songInfo {
+  margin: 0.3rem;
 }
 .playerVolume {
   -webkit-appearance: none;
@@ -292,10 +292,10 @@ body {
   background: #191414;
   outline: none;
   opacity: 0.8;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
 }
-.playerVolume:hover{
+.playerVolume:hover {
   opacity: 0.9;
 }
 .playerVolume::-webkit-slider-thumb {
@@ -304,7 +304,7 @@ body {
   border-radius: 50%;
   width: 1rem;
   height: 1rem;
-  border:1px solid black;
+  border: 1px solid black;
   background: #1db954;
   cursor: pointer;
 }
@@ -312,10 +312,27 @@ body {
 .playerVolume:hover::-moz-range-thumb {
   width: 1rem;
   height: 1rem;
-  border:1px solid black;
+  border: 1px solid black;
   border-radius: 50%;
   background: #1db954;
   cursor: pointer;
+}
+.playerName {
+  font-size: 0.7rem;
+}
+.barContainer{
+  width: 100%;
+  height: 0.5rem;
+  background-color: #1db954;
+  margin:0.5rem 0rem;
+  border-radius: 5px;
+}
+.progressBar{
+  border-radius:5px;
+  background-color: #191414;
+  height: 100%;
+  width: 0%;
+  transition: 0.1s all ease-in-out;
 }
 /* Responsive settings */
 
