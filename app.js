@@ -602,12 +602,15 @@ var UIController = (() => {
   };
 
   ProgressBar.prototype.run = function () {
+    // console.log(progressObj.progress);
     if (progressObj.progress === progressObj.time) {
       progressObj.running = false;
       clearInterval(progressObj.run);
     } else {
       let percentDecimal = progressObj.progress / progressObj.time;
       let percent = percentDecimal * 100;
+      console.log(progressObj.progress);
+      console.log(progressObj.time);
       $(".progressBar").css({
         width: `${percent}%`,
       });
@@ -702,8 +705,8 @@ var UIController = (() => {
     // Playback status updates
     player.addListener("player_state_changed", (state) => {
       // console.log(state);
-      progressObj.progress = state.position / 100;
-      progressObj.time = state.duration / 100;
+      progressObj.progress = state.position / 1000;
+      progressObj.time = state.duration / 1000;
       miniPlayer.updateInfo(state);
       if (!document.querySelector(".playerNext")) {
         let html = document.createElement("div");
