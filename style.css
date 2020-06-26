@@ -72,7 +72,8 @@ body {
   color: white;
 }
 .songElement,
-.artistElement {
+.artistElement,
+.playlistElement {
   margin: 1rem 1rem;
   background-color: white;
   color: #191414;
@@ -104,8 +105,9 @@ body {
 .aboutTheApp {
   padding: 0.5rem;
 }
-.topSongs,
-.topArtists {
+.mySongsButton,
+.myArtistsButton,
+.myPlaylistsButton {
   min-width: 7rem;
   height: 2rem;
   border-bottom-left-radius: 1rem;
@@ -266,7 +268,13 @@ body {
   padding: 0.5rem 1rem;
   border-radius: 5px;
 }
-.playNextButton:hover {
+.playlistStartButton {
+  background-color: #1db954;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+.playNextButton:hover,
+.playlistStartButton:hover {
   cursor: pointer;
   transform: scale(1.04);
   background-color: #1ed760;
@@ -321,19 +329,30 @@ body {
 .playerName {
   font-size: 0.7rem;
 }
-.barContainer{
+.barContainer {
   width: 100%;
   height: 0.5rem;
   background-color: #1db954;
-  margin:0.5rem 0rem;
+  margin: 0.5rem 0rem;
   border-radius: 5px;
 }
-.progressBar{
-  border-radius:5px;
+.progressBar {
+  border-radius: 5px;
   background-color: #191414;
   height: 100%;
   width: 0%;
   transition: 0.1s all ease-in-out;
+}
+.playlistInfoContainer {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+.playlistName {
+  font-weight: 800;
+  text-decoration: underline;
 }
 /* Responsive settings */
 

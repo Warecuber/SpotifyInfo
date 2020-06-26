@@ -71,6 +71,63 @@ var APIController = (() => {
     });
   }
 
+  function loadMyPlaylists() {
+    console.log("Loading my playlists...");
+    $.ajax({
+      url: "https://api.spotify.com/v1/me/playlists?limit=20&offset=0",
+      method: "GET",
+      async: true,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("oAuth")}`,
+      },
+      success: function (data) {
+        UIController.listPlaylists(data.items);
+      },
+      error: function (req, err) {
+        if (req.status === 400 || req.status === 401) {
+          UIController.loginPage();
+        } else if (req.status === 429) {
+          UIController.error(
+            "Error: Too many requests. Please try again in a few minutes."
+          );
+        } else {
+          UIController.error("Sorry, something went wrong. Please try again.");
+        }
+      },
+    });
+  }
+
+  function playThisPlaylist(playlistID) {
+    console.log("Starting playlist...");
+    $.ajax({
+      url: `https://api.spotify.com/v1/me/player/play?device_id=${localStorage.getItem(
+        "deviceID"
+      )}`,
+      method: "PUT",
+      async: true,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("oAuth")}`,
+      },
+      data: JSON.stringify({
+        context_uri: playlistID,
+      }),
+      success: function (data) {
+        console.log("Playing new playlist");
+      },
+      error: function (req, err) {
+        if (req.status === 400 || req.status === 401) {
+          UIController.loginPage();
+        } else if (req.status === 429) {
+          UIController.error(
+            "Error: Too many requests. Please try again in a few minutes."
+          );
+        } else {
+          UIController.error("Sorry, something went wrong. Please try again.");
+        }
+      },
+    });
+  }
+
   function loadCurrentlyPlaying() {
     console.log("Loading currently playing...");
     $.ajax({
@@ -206,11 +263,11 @@ var APIController = (() => {
       },
       success: function (data) {
         if (data) {
-          console.log(data);
+          // console.log(data);
           document.querySelector(".playerVolume").value =
             data.device.volume_percent;
         }
-        console.log(data);
+        // console.log(data);
         if (data.device.id != localStorage.getItem("deviceId")) {
           let el = document.createElement("div");
           el.innerHTML = `Now playing on ${data.device.name}`;
@@ -360,6 +417,12 @@ var APIController = (() => {
     myArtists: () => {
       loadMyArtists();
     },
+    myPlaylists: () => {
+      loadMyPlaylists();
+    },
+    playThis: (id) => {
+      playThisPlaylist(id);
+    },
     genOauth: () => {
       generateAPIToken();
     },
@@ -400,8 +463,9 @@ var UIController = (() => {
   var currentURL = window.location.href;
   var splitURL = currentURL.split("?");
   var progressObj = new ProgressBar(0, 0);
+  var buttonOBJ = new UIButtons();
   console.log(progressObj);
-  const redirectURI = `https://accounts.spotify.com/en/authorize/?client_id=3a1d09a1778a487ba0a87d74c84a3b51&response_type=token&show_dialog=false&scope=user-top-read%20user-read-recently-played%20user-read-email%20user-read-private%20streaming%20user-read-playback-state&redirect_uri=${splitURL[0]}`;
+  const redirectURI = `https://accounts.spotify.com/en/authorize/?client_id=3a1d09a1778a487ba0a87d74c84a3b51&response_type=token&show_dialog=false&scope=user-top-read%20user-read-recently-played%20user-read-email%20user-read-private%20streaming%20user-read-playback-state%20playlist-read-collaborative%20playlist-read-private&redirect_uri=${splitURL[0]}`;
   let progressBarRunning = false;
 
   // Function to redirect to the Spotify login page
@@ -443,9 +507,20 @@ var UIController = (() => {
   // starts the forEach to loop through the elements
   function listMyArtists(list) {
     $(".myArtists").html("");
-    changeTabs();
+    buttonOBJ.switch("myArtistsButton");
     list.forEach((element) => {
       addAnItem(element, ".myArtists");
+    });
+  }
+
+  // gets output from top artist API call
+  // starts the forEach to loop through the elements
+  function listMyPlaylists(list) {
+    $(".myPlaylists").html("");
+    buttonOBJ.switch("myPlaylistsButton");
+    console.log(list);
+    list.forEach((element) => {
+      addAnItem(element, ".myPlaylists");
     });
   }
 
@@ -492,10 +567,17 @@ var UIController = (() => {
     if (where === ".mySongs") {
       newSong.classList.add("songElement");
       newSong.innerHTML = `<span class='songName'><a href='${song.external_urls.spotify}' target='_Blank' class='songLink'>${song.name}</a></span><span class'songArtist'> - ${song.artists[0].name}</span><span id='${song.uri}' data-name='${song.name}' class='playNextButton'>Play next</span><br><br><div class='songMedia'><audio controls class='songPreview'><source src='${song.preview_url}'></audio><img src='${song.album.images[0].url}' class='songImg'></div>`;
+
       container.insertAdjacentElement("beforeend", newSong);
     } else if (where === ".myArtists") {
       newSong.classList.add("artistElement");
       newSong.innerHTML = `<span class='artistName'><a href='${song.external_urls.spotify}' class='artistLink' target="_Blank">${song.name}</a><img src='${song.images[0].url}' class='artistImg'></span>`;
+
+      container.insertAdjacentElement("beforeend", newSong);
+    } else if (where === ".myPlaylists") {
+      newSong.classList.add("playlistElement");
+      newSong.innerHTML = `<span class='playlistInfoContainer'><span class='playlistName'>${song.name}</span><span class'songArtist'>Owner: ${song.owner.display_name}</span><img src='${song.images[0].url}' class='songImg'></span><br><span id='${song.uri}' data-name='${song.name}' class='playlistStartButton'>Play now</span>`;
+
       container.insertAdjacentElement("beforeend", newSong);
     }
   }
@@ -520,11 +602,16 @@ var UIController = (() => {
       APIController.mySongs();
       toggleUI();
     }
-    //event listeners
+
+    //////////////////////////////////
+    // ===== event listeners ===== //
+    ////////////////////////////////
+
     $(".loginButton").on("click", logMeIn);
     $(".logOutButton").on("click", logMeOut);
-    $(".topArtists").on("click", checkArtistContent);
-    $(".topSongs").on("click", checkSongContent);
+    $(".myArtistsButton").on("click", checkArtistContent);
+    $(".mySongsButton").on("click", checkSongContent);
+    $(".myPlaylistsButton").on("click", checkPlaylistContent);
     $(".playerStatus").on("click", movePlayer);
     $(".playerVolume").on("mouseup", function () {
       APIController.volume(this.value);
@@ -540,18 +627,49 @@ var UIController = (() => {
       APIController.myArtists();
     } else {
       if (
-        document.querySelector(".topArtists").classList.contains("inactiveTab")
+        document
+          .querySelector(".myArtistsButton")
+          .classList.contains("inactiveTab")
       ) {
-        changeTabs();
+        buttonOBJ.switch("myArtistsButton");
+        // changeTabs();
       }
     }
   }
 
+  // checks to see if an API call is required to load the playlists
+  function checkPlaylistContent() {
+    var content = document.querySelector(".myPlaylists").innerHTML;
+    if (content === "load") {
+      APIController.myPlaylists();
+    } else {
+      if (
+        document
+          .querySelector(".myPlaylistsButton")
+          .classList.contains("inactiveTab")
+      ) {
+        buttonOBJ.switch("myPlaylistsButton");
+      }
+    }
+    setTimeout(() => {
+      $(".playlistStartButton").on("click", (that) => {
+        APIController.playThis(that.target.id);
+        console.log(miniPlayer);
+        miniPlayer.playing == true
+          ? console.log("already playing")
+          : miniPlayer.toggleUIButton();
+        console.log(miniPlayer);
+        miniPlayer.playing = true;
+      });
+    }, 500);
+  }
+
   // Looks to see if the top songs tab is active
   function checkSongContent() {
-    var content = document.querySelector(".topSongs");
+    var content = document.querySelector(".mySongsButton");
     if (!content.classList.contains("activeTab")) {
-      changeTabs();
+      buttonOBJ.switch("mySongsButton");
+      // changeTabs();
     }
   }
 
@@ -579,6 +697,36 @@ var UIController = (() => {
     });
     $(".bannerContainer").fadeIn(200).delay(3000).fadeOut(200);
   }
+
+  ///////////////////////////////
+  // Prototype for UI Buttons //
+  /////////////////////////////
+
+  function UIButtons() {
+    this.topSongs = "active";
+    this.topArtists = "inactive";
+    this.myPlaylists = "inactive";
+  }
+
+  UIButtons.prototype.switch = function (activeButton) {
+    let activeContainer = activeButton.replace("Button", "");
+    this.topSongs = "inactive";
+    this.topArtists = "inactive";
+    this.myPlaylists = "inactive";
+    this.activeButton = "active";
+    $(".mySongsButton").removeClass("activeTab");
+    $(".myArtistsButton").removeClass("activeTab");
+    $(".myPlaylistsButton").removeClass("activeTab");
+    $(".mySongsButton").addClass("inactiveTab");
+    $(".myArtistsButton").addClass("inactiveTab");
+    $(".myPlaylistsButton").addClass("inactiveTab");
+    $(`.${activeButton}`).removeClass("inactiveTab");
+    $(`.${activeButton}`).addClass("activeTab");
+    $(".myArtists").hide();
+    $(".myPlaylists").hide();
+    $(".mySongs").hide();
+    $(`.${activeContainer}`).show();
+  };
 
   /////////////////////////////////
   // Prototype for progress bar //
@@ -640,6 +788,10 @@ var UIController = (() => {
 
   SpotifyStatsMiniplayer.prototype.toggleStatus = function () {
     this.playing ? miniPlayer.pause() : miniPlayer.play();
+    this.toggleUIButton();
+  };
+
+  SpotifyStatsMiniplayer.prototype.toggleUIButton = function () {
     document
       .getElementById("playPauseButton")
       .classList.toggle("fa-play-circle");
@@ -755,6 +907,9 @@ var UIController = (() => {
     listArtists: (list) => {
       listMyArtists(list);
     },
+    listPlaylists: (list) => {
+      listMyPlaylists(list);
+    },
     onLoad: () => {
       loadPage();
     },
@@ -773,6 +928,7 @@ var UIController = (() => {
     updatePlayerInfo: (data) => {
       miniPlayer.updateInfo(data);
     },
+    buttons: buttonOBJ,
   };
 })(APIController);
 
